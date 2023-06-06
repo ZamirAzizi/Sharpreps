@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "134712045826",
+    "project_id": "sharp-reps",
+    "storage_bucket": "sharp-reps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134712045826:android:0885917e22efe99d58521b",
+        "android_client_info": {
+          "package_name": "com.example.sharp_reps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "134712045826-pu2v9755ut2r8165ifl8h4ejai96vv76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbvzv5kKj6pcS87-UjWnQVGyUvBjhhJD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134712045826-pu2v9755ut2r8165ifl8h4ejai96vv76.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "134712045826-fvha9g564ff75o2hqund9p3iepek6oon.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sharpReps"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
