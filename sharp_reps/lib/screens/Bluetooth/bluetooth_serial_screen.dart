@@ -58,8 +58,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
   var _globalValByte2 = -1;
   var _id = -1;
   var _value = -1;
-  String _enteredNumberOfReps = '';
-  String _enteredNumberOfSets = '';
+  String _enteredNumberOfReps = '0';
+  String _enteredNumberOfSets = '0';
 
   double _maxLimit = 0;
   double _minLimit = 0;
@@ -157,11 +157,11 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }
 
-  void _onDataReceived(Uint8List data) {
-    if (data.isNotEmpty) {
-      _resetBtReceivedData();
+  Future<void> _onDataReceived(Uint8List data) async {
+    try {
+      if (data.isNotEmpty) {
+        _resetBtReceivedData();
 
-      setState(() {
         _globalId = data.elementAt(0) - 128;
         _globalValByte1 = data.elementAt(1);
         _globalValByte2 = data.elementAt(2);
@@ -181,7 +181,10 @@ class _BluetoothAppState extends State<BluetoothApp> {
         } else if (_globalId == 7) {
           _currentDisplacement = _globalValue;
         }
-      });
+      }
+      setState(() {});
+    } catch (e) {
+      setState(() {});
     }
   }
 
@@ -369,14 +372,20 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              TextField(
+                              TextFormField(
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                                 decoration: InputDecoration(
+                                  focusColor:
+                                      Theme.of(context).colorScheme.primary,
                                   enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary)),
+                                    borderSide: BorderSide(
+                                        width: 2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
                                   label: Text(
                                     'Enter Number Of Reps:',
                                     style: TextStyle(
@@ -386,11 +395,18 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   ),
                                 ),
                                 controller: repsController,
-                                onChanged: (value) {
+                                keyboardType: TextInputType.number,
+                                onFieldSubmitted: (value) {
                                   setState(() {
-                                    _enteredNumberOfReps = value;
+                                    if (value.isEmpty) {
+                                      _enteredNumberOfReps = '0';
+                                    } else {
+                                      _enteredNumberOfReps = value;
+                                    }
+
                                     _id = 1;
-                                    _value = _enteredNumberOfReps as int;
+                                    _value =
+                                        int.tryParse(_enteredNumberOfReps)!;
                                     Uint8List _dataToSend = Uint8List.fromList(
                                         ([
                                       _id + 128,
@@ -402,8 +418,14 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   });
                                 },
                               ),
-                              TextField(
+                              Padding(padding: EdgeInsets.all(5)),
+                              TextFormField(
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                                 decoration: InputDecoration(
+                                  focusColor:
+                                      Theme.of(context).colorScheme.primary,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 2,
@@ -411,7 +433,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                               .colorScheme
                                               .primary)),
                                   label: Text(
-                                    'Enter Number Of Reps:',
+                                    'Enter Number Of Sets:',
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -419,11 +441,18 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   ),
                                 ),
                                 controller: setsController,
-                                onChanged: (value) {
+                                keyboardType: TextInputType.number,
+                                onFieldSubmitted: (value) {
                                   setState(() {
-                                    _enteredNumberOfSets = value;
+                                    if (value.isEmpty) {
+                                      _enteredNumberOfSets = '0';
+                                    } else {
+                                      _enteredNumberOfSets = value;
+                                    }
+
                                     _id = 2;
-                                    _value = _enteredNumberOfSets as int;
+                                    _value =
+                                        int.tryParse(_enteredNumberOfSets)!;
                                     Uint8List _dataToSend = Uint8List.fromList(
                                         ([
                                       _id + 128,
