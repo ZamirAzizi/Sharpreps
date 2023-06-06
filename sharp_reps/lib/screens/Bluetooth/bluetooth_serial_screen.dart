@@ -50,23 +50,24 @@ class _BluetoothAppState extends State<BluetoothApp> {
   bool _connected = false;
   bool _isButtonUnavailable = false;
 
+  final repsController = TextEditingController();
+  final setsController = TextEditingController();
+
   var _globalId = -1;
   var _globalValByte1 = -1;
   var _globalValByte2 = -1;
   var _id = -1;
   var _value = -1;
+  String _enteredNumberOfReps = '';
+  String _enteredNumberOfSets = '';
 
   double _maxLimit = 0;
   double _minLimit = 0;
   double _numberOfReps = 0;
-  var _enteredNumberOfReps = 0;
-  var _enteredNumberOfSets = 0;
+
   double _numberOfSets = 0;
   double _calibrationRequired = 0;
   double _currentDisplacement = 0;
-
-  final repsController = TextEditingController();
-  final setsController = TextEditingController();
 
   // Uint8List? _dataToSend;
   double _globalValue = -1;
@@ -196,15 +197,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
       setState(() {});
     }
   }
-
-  // _sendOffMessageToBluetooth(Uint8List dataToSend) async {
-  //   connection!.output.add(dataToSend);
-  //   await connection!.output.allSent;
-  //   // show('Device Turned Off');
-  //   setState(() {
-  //     _dataToSend = ((_id + 128) + (_value)) as double;
-  //   });
-  // }
 
   _resetBtReceivedData() {
     _globalId = -1;
@@ -385,14 +377,20 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary)),
-                                  label: Text('Enter Number Of Reps:'),
+                                  label: Text(
+                                    'Enter Number Of Reps:',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
                                 ),
                                 controller: repsController,
                                 onChanged: (value) {
                                   setState(() {
-                                    _enteredNumberOfReps = value as int;
+                                    _enteredNumberOfReps = value;
                                     _id = 1;
-                                    _value = _enteredNumberOfReps.toInt();
+                                    _value = _enteredNumberOfReps as int;
                                     Uint8List _dataToSend = Uint8List.fromList(
                                         ([
                                       _id + 128,
@@ -412,14 +410,20 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary)),
-                                  label: Text('Enter Number Of Reps:'),
+                                  label: Text(
+                                    'Enter Number Of Reps:',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
                                 ),
                                 controller: setsController,
                                 onChanged: (value) {
                                   setState(() {
-                                    _enteredNumberOfSets = value as int;
+                                    _enteredNumberOfSets = value;
                                     _id = 2;
-                                    _value = _enteredNumberOfSets.toInt();
+                                    _value = _enteredNumberOfSets as int;
                                     Uint8List _dataToSend = Uint8List.fromList(
                                         ([
                                       _id + 128,
