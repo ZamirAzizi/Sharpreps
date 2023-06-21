@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../pickers/user_image_picker.dart';
@@ -43,6 +45,7 @@ class _AuthFormState extends State<AuthForm> {
 
   void _trysubmit() {
     final isValid = _formKey.currentState!.validate();
+
     FocusScope.of(context).unfocus();
 
     if (_userImageFile == null && !_isLogin) {
@@ -231,13 +234,21 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   const SizedBox(height: 12),
                   if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
+                  if (!widget.isLoading &&
+                      defaultTargetPlatform == TargetPlatform.android)
                     ElevatedButton(
                       onPressed: _trysubmit,
                       child: Text(_isLogin ? 'Login' : 'Signup'),
                     ),
+                  if (!widget.isLoading &&
+                      defaultTargetPlatform == TargetPlatform.iOS)
+                    CupertinoButton.filled(
+                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                      onPressed: _trysubmit,
+                    ),
                   if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
+                  if (!widget.isLoading &&
+                      defaultTargetPlatform == TargetPlatform.android)
                     TextButton(
                       style: TextButtonTheme.of(context).style,
                       onPressed: () {
@@ -248,6 +259,18 @@ class _AuthFormState extends State<AuthForm> {
                       child: Text(_isLogin
                           ? 'Create new account'
                           : 'I already have an account'),
+                    ),
+                  if (!widget.isLoading &&
+                      defaultTargetPlatform == TargetPlatform.iOS)
+                    CupertinoButton(
+                      child: Text(_isLogin
+                          ? 'Create new account'
+                          : 'I already have an account'),
+                      onPressed: () {
+                        setState(() {
+                          _isLogin = !_isLogin;
+                        });
+                      },
                     ),
                 ],
               ),
