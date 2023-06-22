@@ -284,6 +284,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
           child: !isConnected
               ? Container(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Visibility(
@@ -328,7 +329,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                       dropdownColor: Theme.of(context)
                                           .colorScheme
                                           .secondary,
-                                      //     Theme.of(context).colorScheme.primary,
                                       items: _getDeviceItems(),
                                       onChanged: (value) =>
                                           setState(() => _device = value!),
@@ -371,148 +371,81 @@ class _BluetoothAppState extends State<BluetoothApp> {
                       // isConnected
                       //     ?
                       Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      TextFormField(
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                        decoration: InputDecoration(
-                          focusColor: Theme.of(context).colorScheme.primary,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Theme.of(context).colorScheme.primary),
-                          ),
-                          label: Text(
-                            'Enter Number Of Reps:',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "$_currentDisplacement Distance",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSecondary,
                           ),
                         ),
-                        controller: repsController,
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (value) {
-                          setState(() {
-                            if (value.isEmpty) {
-                              _enteredNumberOfReps = '0';
-                            } else {
-                              _enteredNumberOfReps = value;
-                            }
-
-                            _id = 1;
-                            _value = int.tryParse(_enteredNumberOfReps)!;
-                            Uint8List _dataToSend = Uint8List.fromList(([
-                              _id + 128,
-                              _value.toInt().floor(),
-                              _value % 128
-                            ]));
-
-                            _sendByte(_dataToSend);
-                          });
-                        },
-                      ),
-                      Padding(padding: EdgeInsets.all(5)),
-                      TextFormField(
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                        decoration: InputDecoration(
-                          focusColor: Theme.of(context).colorScheme.primary,
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 2,
-                                  color:
-                                      Theme.of(context).colorScheme.primary)),
-                          label: Text(
-                            'Enter Number Of Sets:',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary),
+                        Text(
+                          _calibrationRequired == 1
+                              ? " Calibration Completed"
+                              : " Calibratrion Required",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSecondary,
                           ),
                         ),
-                        controller: setsController,
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (value) {
-                          setState(() {
-                            if (value.isEmpty) {
-                              _enteredNumberOfSets = '0';
-                            } else {
-                              _enteredNumberOfSets = value;
-                            }
-
-                            _id = 2;
-                            _value = int.tryParse(_enteredNumberOfSets)!;
-                            Uint8List _dataToSend = Uint8List.fromList(([
-                              _id + 128,
-                              _value.toInt().floor(),
-                              _value % 128
-                            ]));
-
-                            _sendByte(_dataToSend);
-                          });
-                        },
-                      ),
-                      Text(
-                        "$_currentDisplacement Distance",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSecondary,
+                        Text(
+                          "$_maxLimit cm",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
                         ),
-                      ),
-                      Text(
-                        _calibrationRequired == 1
-                            ? "$_calibrationRequired Calibration completed"
-                            : "$_calibrationRequired Calibratrion Required",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSecondary,
+                        Text(
+                          "$_minLimit cm",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "$_maxLimit cm",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                      ),
-                      Text(
-                        "$_minLimit cm",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                      ),
-                      ElevatedButton(
+                        ElevatedButton(
                           onPressed: () {
                             _id = 5;
                             _value = 1;
-                            Uint8List _dataToSend = Uint8List.fromList(([
-                              _id + 128,
-                              _value.toInt().floor(),
-                              _value % 128
-                            ]));
+                            Uint8List _dataToSend = Uint8List.fromList(
+                              ([
+                                _id + 128,
+                                _value.toInt().floor(),
+                                _value % 128
+                              ]),
+                            );
 
                             _sendByte(_dataToSend);
                           },
-                          child: Text("Send Data"))
-                    ],
+                          child: Text("Send Data"),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                              Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          onPressed: _isButtonUnavailable
+                              ? null
+                              : _connected
+                                  ? _disconnect
+                                  : _connect,
+                          child: Text(
+                            _connected ? 'Disconnect' : 'Connect',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-                  // : Center(
-                  //     child: Text(
-                  //       textAlign: TextAlign.center,
-                  //       'Please connect to a Sharp Reps device',
-                  //       style: TextStyle(
-                  //           fontSize: 24,
-                  //           fontWeight: FontWeight.bold,
-                  //           color:
-                  //               Theme.of(context).colorScheme.onSecondary),
-                  //     ),
-                  //   ),
-                  ),
+                ),
         ),
       ),
     );
@@ -608,3 +541,96 @@ class _BluetoothAppState extends State<BluetoothApp> {
     // );
   }
 }
+
+
+// appendix
+
+// TextFormField(
+                      //   style: TextStyle(
+                      //       color: Theme.of(context).colorScheme.primary),
+                      //   decoration: InputDecoration(
+                      //     focusColor: Theme.of(context).colorScheme.primary,
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //           width: 2,
+                      //           color: Theme.of(context).colorScheme.primary),
+                      //     ),
+                      //     label: Text(
+                      //       'Enter Number Of Reps:',
+                      //       style: TextStyle(
+                      //           color: Theme.of(context).colorScheme.primary),
+                      //     ),
+                      //   ),
+                      //   controller: repsController,
+                      //   keyboardType: TextInputType.number,
+                      //   onFieldSubmitted: (value) {
+                      //     setState(() {
+                      //       if (value.isEmpty) {
+                      //         _enteredNumberOfReps = '0';
+                      //       } else {
+                      //         _enteredNumberOfReps = value;
+                      //       }
+
+                      //       _id = 1;
+                      //       _value = int.tryParse(_enteredNumberOfReps)!;
+                      //       Uint8List _dataToSend = Uint8List.fromList(([
+                      //         _id + 128,
+                      //         _value.toInt().floor(),
+                      //         _value % 128
+                      //       ]));
+
+                      //       _sendByte(_dataToSend);
+                      //     });
+                      //   },
+                      // ),
+                      // Padding(padding: EdgeInsets.all(5)),
+                      // TextFormField(
+                      //   style: TextStyle(
+                      //       color: Theme.of(context).colorScheme.primary),
+                      //   decoration: InputDecoration(
+                      //     focusColor: Theme.of(context).colorScheme.primary,
+                      //     enabledBorder: OutlineInputBorder(
+                      //         borderSide: BorderSide(
+                      //             width: 2,
+                      //             color:
+                      //                 Theme.of(context).colorScheme.primary)),
+                      //     label: Text(
+                      //       'Enter Number Of Sets:',
+                      //       style: TextStyle(
+                      //           color: Theme.of(context).colorScheme.primary),
+                      //     ),
+                      //   ),
+                      //   controller: setsController,
+                      //   keyboardType: TextInputType.number,
+                      //   onFieldSubmitted: (value) {
+                      //     setState(() {
+                      //       if (value.isEmpty) {
+                      //         _enteredNumberOfSets = '0';
+                      //       } else {
+                      //         _enteredNumberOfSets = value;
+                      //       }
+
+                      //       _id = 2;
+                      //       _value = int.tryParse(_enteredNumberOfSets)!;
+                      //       Uint8List _dataToSend = Uint8List.fromList(([
+                      //         _id + 128,
+                      //         _value.toInt().floor(),
+                      //         _value % 128
+                      //       ]));
+
+                      //       _sendByte(_dataToSend);
+                      //     });
+                      //   },
+                      // ),
+
+                                // : Center(
+                  //     child: Text(
+                  //       textAlign: TextAlign.center,
+                  //       'Please connect to a Sharp Reps device',
+                  //       style: TextStyle(
+                  //           fontSize: 24,
+                  //           fontWeight: FontWeight.bold,
+                  //           color:
+                  //               Theme.of(context).colorScheme.onSecondary),
+                  //     ),
+                  //   ),
