@@ -58,8 +58,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
   var _globalValByte2 = -1;
   var _id = -1;
   var _value = -1;
-  String _enteredNumberOfReps = '0';
-  String _enteredNumberOfSets = '0';
+  // String _enteredNumberOfReps = '0';
+  // String _enteredNumberOfSets = '0';
 
   double _maxLimit = 0;
   double _minLimit = 0;
@@ -331,7 +331,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                           .secondary,
                                       items: _getDeviceItems(),
                                       onChanged: (value) =>
-                                          setState(() => _device = value!),
+                                          setState(() => _device = value),
                                       value: _devicesList.isNotEmpty
                                           ? _device
                                           : null,

@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+		<string>Allow Bluetooth communication for connecting to devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+		<string>Allow Bluetooth communication for connecting to devices.</string>
 </dict>
 </plist>

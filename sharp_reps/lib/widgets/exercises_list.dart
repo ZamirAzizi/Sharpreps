@@ -53,7 +53,7 @@ class _ExercisesListState extends State<ExercisesList> {
               itemCount: exercisesSnapshot.data!.docs
                   .length, // Item count based on the length of data in the DB
               itemBuilder: (ctx, index) {
-                var exerciseAutoGuid = exercisesSnapshot.data!.docs[index].id;
+                // var exerciseAutoGuid = exercisesSnapshot.data!.docs[index].id;
                 var exerciseName =
                     exercisesSnapshot.data!.docs[index].get('exercise name');
                 return ListTile(
