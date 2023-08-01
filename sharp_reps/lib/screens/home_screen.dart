@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sharp_reps/screens/Bluetooth/ios_bluetooth.dart';
 
 import '../screens/dashboard_screen.dart';
 
@@ -20,7 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _pages = [
     DashboardScreen(),
     MainScreen(),
-    BluetoothApp(),
+    defaultTargetPlatform == TargetPlatform.iOS
+        ? IosBluetooth()
+        : BluetoothApp(),
     ProfileScreen(),
     SettingsScreen(),
   ];
