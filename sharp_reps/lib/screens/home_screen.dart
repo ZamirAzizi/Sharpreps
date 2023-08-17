@@ -1,13 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sharp_reps/screens/Bluetooth/ios_bluetooth.dart';
 
 import '../screens/dashboard_screen.dart';
 
 import '../screens/main_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/settings_screen.dart';
-import '../screens/Bluetooth/bluetooth_serial_screen.dart';
+import '../screens/Bluetooth/BLE_Android_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,9 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _pages = [
     DashboardScreen(),
     MainScreen(),
-    defaultTargetPlatform == TargetPlatform.iOS
-        ? IosBluetooth()
-        : BluetoothApp(),
+    FlutterBlueApp(),
     ProfileScreen(),
     SettingsScreen(),
   ];
