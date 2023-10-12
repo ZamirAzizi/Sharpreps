@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert' show utf8;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+
 
 class SensorPage extends StatefulWidget {
   const SensorPage({Key? key, required this.device}) : super(key: key);
@@ -20,13 +20,21 @@ class _SensorPageState extends State<SensorPage> {
   var id = "0";
   var Data = "0,0";
 
+  // var _maxNumberofReps = "0";
+  // var _maxNumberofSets = "0";
   var _maxLimit = "0";
   var _minLimit = "0";
   var _numberOfReps = "0";
-
+  var _repTime = "0";
+  var _setTime = "0";
   var _numberOfSets = "0";
   var _calibrationRequired = "0";
   var _currentDisplacement = "0";
+  var _repState = 'Idle';
+  var _repIncompleteCounter = '0';
+  var _setRestTimer = '0';
+  var _repIncompletePercentage = '0';
+  var _calibState = 'Idle';
   Stream<List<int>>? stream;
   BluetoothCharacteristic? sendCharacteristic; // Add this line
 
@@ -133,15 +141,34 @@ class _SensorPageState extends State<SensorPage> {
     }
   }
 
-  // void _sendTestData() async {
-  //   if (sendCharacteristic_5 != null) {
-  //     String dataToSend = "1";
-  //     List<int> dataBytes = utf8.encode(dataToSend);
-  //     print(dataToSend);
-  //     await sendCharacteristic_5!.write(dataBytes);
-  //     print('Data sent successfully: $dataToSend');
-  //   }
-  // }
+  DateTime _date = DateTime.now();
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2059),
+    ).then((value) {
+      setState(() {
+        _date = value!;
+      });
+    });
+  }
+
+  String intToTimeLeft(int value) {
+    int h, m, s;
+
+    h = value ~/ 3600;
+
+    m = ((value - h * 3600)) ~/ 60;
+
+    s = value - (h * 3600) - (m * 60);
+
+    String result = "$h:$m:$s s";
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +181,10 @@ class _SensorPageState extends State<SensorPage> {
               ? Center(
                   child: Text(
                     "Waiting...",
-                    style: TextStyle(fontSize: 24, color: Colors.red),
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 )
               : Scaffold(
@@ -174,85 +204,267 @@ class _SensorPageState extends State<SensorPage> {
                           var val_byte = Data.split(",").elementAt(1);
                           print(Data);
 
-                          if (id == "9") {
-                            _maxLimit = val_byte;
-                          } else if (id == "10") {
-                            _minLimit = val_byte;
-                          } else if (id == "3") {
-                            _numberOfReps = val_byte;
-                          } else if (id == "1") {
-                            _numberOfReps = val_byte;
-                          } else if (id == "6") {
+                          if (id == "6") {
                             _calibrationRequired = val_byte;
                             print(val_byte);
                           } else if (id == "7") {
                             _currentDisplacement = val_byte;
+                          } else if (id == "8") {
+                            var State = val_byte;
+                            if (State == '0') {
+                              _calibState = 'Idle';
+                            } else if (State == '1') {
+                              _calibState = 'Looking For Max';
+                            } else if (State == '2') {
+                              _calibState = 'Looking For Min';
+                            }
+                          } else if (id == "9") {
+                            _maxLimit = val_byte;
+                          } else if (id == "10") {
+                            _minLimit = val_byte;
+                          } else if (id == "11") {
+                            _numberOfReps = val_byte;
+                          } else if (id == "12") {
+                            _numberOfSets = val_byte;
+                          } else if (id == "13") {
+                            var time = ((int.parse(val_byte) * 100) ~/ 1000);
+                            _repTime = intToTimeLeft(time);
+                            // _repTime = (_setTime / 1000);
+                          } else if (id == "14") {
+                            var time = ((int.parse(val_byte) * 100) ~/ 1000);
+                            _setTime = intToTimeLeft(time);
+                          } else if (id == "15") {
+                            var State = val_byte;
+                            if (State == '0') {
+                              _repState = 'Idle';
+                            } else if (State == '1') {
+                              _repState = 'UP';
+                            } else if (State == '2') {
+                              _repState = 'Down';
+                            }
+                          } else if (id == "16") {
+                            _repIncompleteCounter = val_byte;
+                          } else if (id == "17") {
+                            var time = ((int.parse(val_byte) * 100) ~/ 1000);
+                            _setRestTimer = intToTimeLeft(time);
+                          } else if (id == "18") {
+                            _repIncompletePercentage = val_byte;
                           }
                           // var currentValue = utf8.decode(snapshot.data!);
-                          print(_calibrationRequired);
+                          // print(_calibrationRequired);
                           // print(currentValue);
-                          print(_currentDisplacement);
-                          print(id);
-                          print(val_byte);
+                          // print(_currentDisplacement);
+                          // print(id);
+                          // print(val_byte);
                           return Center(
+                            child: SingleChildScrollView(
                               child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  // FirebaseDropdownWidget(),
+                                  Text(
+                                    ' ${Data} mm',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  Text(
+                                    _calibrationRequired == "1"
+                                        ? " Calibration Completed"
+                                        : " Calibratrion Required",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    _date.toString(),
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_maxLimit cm",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_minLimit cm",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(' ${Data} mm',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24,
-                                              color: Colors.black)),
-                                      Text(
-                                          _calibrationRequired == "1"
-                                              ? " Calibration Completed"
-                                              : " Calibratrion Required",
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          )),
-                                      Text(
-                                        "$_maxLimit cm",
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
-                                      Text(
-                                        "$_minLimit cm",
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
                                       ElevatedButton(
                                         onPressed: () {
                                           id = "5";
                                           String data = ("${id}, 1 ");
                                           _sendTestData(data);
                                         },
-                                        child: Text("Send Data"),
+                                        child: Text("Start Calibraation"),
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                        width: 12,
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          id = "3";
+                                          String data = ("${id}, 1 ");
+                                          _sendTestData(data);
+                                        },
+                                        child: Text("Start Workout"),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          id = "4";
+                                          String data = ("${id}, 1 ");
+                                          _sendTestData(data);
+                                        },
+                                        child: Text("Start New Set"),
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                        width: 12,
+                                      ),
+                                      MaterialButton(
+                                        onPressed: _showDatePicker,
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Text(
+                                            'Choose Date',
+                                          ),
+                                        ),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       )
-                                    ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "$_numberOfReps Reps",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                        width: 12,
+                                      ),
+                                      Text(
+                                        "$_numberOfSets Sets",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    _repState,
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_repTime Rep Time",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_setTime Set Time",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_setRestTimer Rest Time",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_repIncompleteCounter Incomplete Reps",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_repIncompletePercentage Incomplete Reps %",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ));
+                            ),
+                          );
                         } else {
-                          return Text('Check the stream');
+                          return Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              'Loading...',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          );
                         }
                       },
                     ),

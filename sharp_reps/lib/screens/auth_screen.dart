@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/auth/auth_form.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+
+final _auth = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -15,7 +17,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
   void _submitAuthForm(
@@ -69,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'image_url': url
         });
       }
-    } on PlatformException catch (err) {
+    } on FirebaseAuthException catch (err) {
       var message = 'An error occured, please check your credentials';
       if (err.message != null) {
         message = err.message.toString();
@@ -85,12 +86,13 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-    } catch (err) {
-      // print(err);
-      setState(() {
-        _isLoading = false;
-      });
     }
+    // catch (err) {
+    //   // print(err);
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    // }
   }
 
   @override

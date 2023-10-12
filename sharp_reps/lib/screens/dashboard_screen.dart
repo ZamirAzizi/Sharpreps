@@ -11,38 +11,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(children: [
-                Image.asset(
-                  "assets/images/app_loading_icon.png",
-                ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Card(
-                color: Theme.of(context).colorScheme.primary,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Sharpen Up Your Reps',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(
+            "assets/images/app_loading_icon.png",
+            height: 250,
+            width: 250,
+          ),
+          // Text(
+          //   'Sharpen Up Your Reps',
+          //   style: TextStyle(
+          //     color: Theme.of(context).colorScheme.primary,
+          //     fontSize: 20,
+          //     fontStyle: FontStyle.italic,
+          //   ),
+          // ),
+        ],
       ),
     );
   }

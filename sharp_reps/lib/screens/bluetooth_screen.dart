@@ -32,7 +32,6 @@ class _BluetoothScreenState extends State<BluetoothScreen>
     super.dispose();
   }
 
-  @override
   void didChangeAppLifeCycleState(AppLifecycleState state) {
     if (state.index == 0) {
       //resume

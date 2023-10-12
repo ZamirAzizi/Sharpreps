@@ -50,6 +50,8 @@ dependencies:
   beamer: ^1.5.3
   flutter_blue: ^0.8.0
   oscilloscope: ^0.2.0+1
+  go_router: ^10.1.0
+  flutter_settings_screens: ^0.3.3-null-safety+2
 
  
 
@@ -87,6 +89,10 @@ flutter:
     - assets/images/app_loading_icon.png
     - assets/images/app_logo.png
     - assets/images/background_image.png
+    - assets/images/profile_cover_1.png
+    - assets/images/background_closeup.png
+    - assets/images/dumbbell_logo.png
+    - assets/images/app_icon.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

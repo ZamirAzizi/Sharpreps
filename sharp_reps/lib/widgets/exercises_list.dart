@@ -8,12 +8,12 @@ import '../components/exercise_tile.dart';
 
 class ExercisesList extends StatefulWidget {
   final String workoutAutoGuid;
-  // final String exerciseName;
+  final String WorkoutName;
 
   const ExercisesList({
     super.key,
     required this.workoutAutoGuid,
-    // required this.exerciseName,
+    required this.WorkoutName,
   });
 
   @override
@@ -22,6 +22,12 @@ class ExercisesList extends StatefulWidget {
 
 class _ExercisesListState extends State<ExercisesList> {
   final user = FirebaseAuth.instance.currentUser!;
+
+  // checkbox was tapped
+  // onCheckboxChanged(String workoutName, String exerciseName) {
+  //   Provider.of<WorkoutData>(context, listen: false)
+  //       .checkOffExercise(workoutName, exerciseName);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -53,19 +59,27 @@ class _ExercisesListState extends State<ExercisesList> {
               itemCount: exercisesSnapshot.data!.docs
                   .length, // Item count based on the length of data in the DB
               itemBuilder: (ctx, index) {
-                // var exerciseAutoGuid = exercisesSnapshot.data!.docs[index].id;
+                var exerciseAutoGuid = exercisesSnapshot.data!.docs[index].id;
+
                 var exerciseName =
                     exercisesSnapshot.data!.docs[index].get('exercise name');
                 return ListTile(
                   title: SingleChildScrollView(
                     child: ExerciseTile(
                       exerciseName: exerciseName,
+                      exerciseAutoGuid: exerciseAutoGuid,
+                      workoutAutoGuid: widget.workoutAutoGuid,
                       weight: exercisesSnapshot.data!.docs[index]
                           ['weight used'],
                       reps: exercisesSnapshot.data!.docs[index]
                           ['number of reps'],
                       sets: exercisesSnapshot.data!.docs[index]
                           ['number of sets'],
+                      isCompleted: exercisesSnapshot.data!.docs[index]
+                          ['checkbox'],
+                      onCheckboxChanged: (val) {
+                        val = val!;
+                      },
                     ),
                   ),
                 );

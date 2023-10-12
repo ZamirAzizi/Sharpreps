@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sharp_reps/screens/settings_screen.dart';
 
 import '../screens/dashboard_screen.dart';
-
 import '../screens/main_screen.dart';
 import '../screens/profile_screen.dart';
-import '../screens/settings_screen.dart';
-import '../screens/Bluetooth/BLE_Android_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,9 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _pages = [
     DashboardScreen(),
     MainScreen(),
-    FlutterBlueApp(),
-    ProfileScreen(),
     SettingsScreen(),
+    ProfileScreen(),
+
+    // FlutterBlueApp()
   ];
 
   void _onItemTapped(int index) {

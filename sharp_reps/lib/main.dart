@@ -5,8 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sharp_reps/screens/gorouter_home_screen.dart';
 
-import '/screens/home_screen.dart';
 import '/screens/auth_screen.dart';
 import '/screens/splash_screen.dart';
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => WorkoutData(),
       child: MaterialApp(
-        title: 'Flutter Chat',
+        title: 'Sharp Reps',
         theme: ThemeData(
           colorScheme: const ColorScheme(
               brightness: Brightness.dark,
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
             }
 
             if (userSnapshot.hasData) {
-              return const HomeScreen();
+              return NestedTabNavigationExampleApp();
             }
             return const AuthScreen();
           },

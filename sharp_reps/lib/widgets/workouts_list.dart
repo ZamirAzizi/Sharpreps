@@ -60,16 +60,27 @@ class _WorkoutsListState extends State<WorkoutsList> {
                 var workoutName = workoutsSnapshots.data!.docs[index].get(
                     'workout name'); // Get the ID of the data you want so it is human legible
                 var workoutAutoGuid = workoutsSnapshots.data!.docs[index].id;
-                return ListTile(
-                  title: Text(
-                      workoutName.toString()), // print the id as workout title
-                  trailing: IconButton(
-                      icon: Icon(
-                        Icons
-                            .arrow_forward, // Icon button so that we can add exercises to the workouts created.
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      onPressed: () =>
-                          goToWorkoutScreen(workoutAutoGuid, workoutName)),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    child: ListTile(
+                      title: Text(workoutName
+                          .toString()), // print the id as workout title
+                      trailing: IconButton(
+                          icon: Icon(
+                            Icons
+                                .arrow_forward, // Icon button so that we can add exercises to the workouts created.
+                          ),
+                          onPressed: () =>
+                              goToWorkoutScreen(workoutAutoGuid, workoutName)),
+                    ),
+                  ),
                 );
               },
             );
