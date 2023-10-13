@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sharp_reps/screens/workout_screen.dart';
 import 'package:sharp_reps/widgets/workouts_list.dart';
+// import 'package:sharp_reps/widgets/workouts_list.dart';
 
-import '../data/workout_data.dart';
+// import '../data/workout_data.dart';
 
 // text controller
 final newWorkoutNameController = TextEditingController();
@@ -20,6 +22,23 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  Future<void> goToWorkoutScreen(
+      String workoutAutoGuid, String workoutName) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WorkoutScreen(
+          workoutAutoGuid: workoutAutoGuid,
+          workoutName: workoutName,
+        ),
+      ),
+    );
+  }
+
+  final double coverHeight = 220;
+  final double profileHeight = 120;
+  final user = FirebaseAuth.instance.currentUser!; // Get Current User
+
   // Future<void> _saveWorkout() async {
   //   FocusScope.of(context).unfocus();
   //   // Get user id
@@ -94,42 +113,43 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<WorkoutData>(
-      builder: (context, value, child) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Workouts Home"),
-          actions: <Widget>[
-            DropdownButton(
-              underline: Container(),
-              icon: Icon(
-                Icons.more_vert,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              items: [
-                DropdownMenuItem(
-                  value: 'logout',
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.exit_to_app,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text('Logout'),
-                    ],
-                  ),
-                ),
-              ],
-              onChanged: (itemidentifier) {
-                if (itemidentifier == 'logout') {
-                  FirebaseAuth.instance.signOut();
-                }
-              },
-            )
-          ],
-        ),
+    final top = coverHeight / 2;
+    return Scaffold(
+        // appBar: AppBar(
+        //   title: const Text("Workouts"),
+        //   actions: <Widget>[
+        //     DropdownButton(
+        //       underline: Container(),
+        //       icon: Icon(
+        //         Icons.more_vert,
+        //         color: Theme.of(context).colorScheme.secondary,
+        //       ),
+        //       items: [
+        //         DropdownMenuItem(
+        //           value: 'logout',
+        //           child: Row(
+        //             children: <Widget>[
+        //               Icon(
+        //                 Icons.exit_to_app,
+        //                 color: Theme.of(context).colorScheme.onSecondary,
+        //               ),
+        //               SizedBox(
+        //                 width: 8,
+        //               ),
+        //               Text('Logout'),
+        //             ],
+        //           ),
+        //         ),
+        //       ],
+        //       onChanged: (itemidentifier) {
+        //         if (itemidentifier == 'logout') {
+        //           FirebaseAuth.instance.signOut();
+        //         }
+        //       },
+        //     )
+        //   ],
+        // ),
+
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.primary,
           child: Icon(
@@ -140,9 +160,34 @@ class _MainScreenState extends State<MainScreen> {
             DialogService.load(context);
           },
         ),
-        body: WorkoutsList(),
-      ),
-    );
+        body: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: profileHeight / 2.5,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    backgroundImage: AssetImage(
+                      "assets/images/app_loading_icon.png",
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    'Workouts',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: WorkoutsList(),
+            ),
+          ],
+        ));
   }
 }
 
@@ -209,17 +254,17 @@ class LoadDialog extends IDialog {
           },
         ),
         actions: [
-          // save button
-          MaterialButton(
-            onPressed: () => save(context),
-            child: Text('Save'),
-            color: Theme.of(context).colorScheme.primary,
-          ),
-
           // Cancel button
           MaterialButton(
             onPressed: cancel,
             child: Text('Cancel'),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+
+          // save button
+          MaterialButton(
+            onPressed: () => save(context),
+            child: Text('Save'),
             color: Theme.of(context).colorScheme.primary,
           ),
         ],

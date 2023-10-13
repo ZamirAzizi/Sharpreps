@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,30 +100,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          color: Colors.black,
-                          child: Image.asset(
-                            "assets/images/app_icon.png",
-                            width: double.infinity,
-                            height: coverHeight,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Positioned(
-                          top: top,
-                          child: CircleAvatar(
-                            radius: profileHeight / 2,
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 25, left: 25, right: 25),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: profileHeight / 2.5,
                             backgroundColor:
                                 Theme.of(context).colorScheme.secondary,
-                            backgroundImage: NetworkImage(imageUrl),
+                            backgroundImage: AssetImage(
+                              "assets/images/app_loading_icon.png",
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 15),
+                          Text(
+                            'Profile',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
+                    // Stack(
+                    //   alignment: Alignment.center,
+                    //   clipBehavior: Clip.none,
+                    //   children: [
+                    // Container(
+                    //   color: Colors.black,
+                    //   child: Image.asset(
+                    //     "assets/images/app_icon.png",
+                    //     width: double.infinity,
+                    //     height: coverHeight,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
+                    // Positioned(
+                    //   top: top,
+                    //   child:
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                          radius: profileHeight / 2.5,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          backgroundImage: NetworkImage(imageUrl)),
+                    ),
+                    // ),
+                    //   ],
+                    // ),
                     Padding(
                       padding: EdgeInsets.only(
                         top: profileHeight / 2 + 15,
@@ -132,7 +158,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -143,22 +172,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'Username: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$username',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -176,7 +197,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -187,22 +211,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'Email: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$useremail',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -220,7 +236,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -231,22 +250,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'Number: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$usernumber',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -264,7 +275,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -275,22 +289,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'First Name: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$userfirstname',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -308,7 +314,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -319,22 +328,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'Last Name: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$userlastname',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -352,7 +353,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 15,
                       ),
                       child: Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        shape: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
                         child: Column(
                           children: [
                             Padding(
@@ -363,22 +367,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Text(
                                     'Gender: ',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                   Text(
                                     '$usergender',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -409,8 +405,6 @@ Widget buildCoverImage() => Container(
       height: 60,
     );
 
-
-
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -429,7 +423,7 @@ Widget buildCoverImage() => Container(
 
 //   Future<Query<Map<String, dynamic>>> getprofile() async {
 //   var userCollection = await db.collection("users").where("id", isEqualTo: user);
-  
+
 //   return userCollection;
 // }
 
@@ -517,4 +511,3 @@ Widget buildCoverImage() => Container(
 //   //       child: Image.network(),
 //   //     );
 // }
-
