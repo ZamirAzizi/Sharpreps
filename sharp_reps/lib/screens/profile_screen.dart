@@ -101,8 +101,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 25, left: 25, right: 25),
+                      padding: const EdgeInsets.only(
+                        top: 45,
+                        left: 25,
+                        right: 25,
+                      ),
                       child: Row(
                         // mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

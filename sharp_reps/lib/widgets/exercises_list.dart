@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sharp_reps/screens/exercise_detail.dart';
 
 import '../components/exercise_tile.dart';
 
@@ -64,6 +65,11 @@ class _ExercisesListState extends State<ExercisesList> {
                 var exerciseName =
                     exercisesSnapshot.data!.docs[index].get('exercise name');
                 return ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseDetail(),
+                    ),
+                  ),
                   title: SingleChildScrollView(
                     child: ExerciseTile(
                       exerciseName: exerciseName,

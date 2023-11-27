@@ -32,6 +32,8 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutScreen> {
+  final double profileHeight = 120;
+
   // checkbox was tapped
   onCheckboxChanged() {}
 
@@ -41,9 +43,10 @@ class _WorkoutPageState extends State<WorkoutScreen> {
   Widget build(BuildContext context) {
     return Consumer<WorkoutData>(
       builder: (context, value, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(widget.workoutName + ' Exercises'),
-        ),
+        // appBar: AppBar(
+        //   title: Text(widget.workoutName + ' Exercises'),
+        // ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             _workoutAutoGuid = widget.workoutAutoGuid;
@@ -55,11 +58,52 @@ class _WorkoutPageState extends State<WorkoutScreen> {
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
-        body: Container(
-            child: ExercisesList(
-                workoutAutoGuid: widget.workoutAutoGuid,
-                WorkoutName: widget.workoutName),
-            color: Colors.black12),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 45,
+                left: 25,
+                right: 25,
+                bottom: 25,
+              ),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  CircleAvatar(
+                    radius: profileHeight / 2.5,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    backgroundImage: AssetImage(
+                      "assets/images/app_loading_icon.png",
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Text(
+                      widget.workoutName + ' Exercises',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ExercisesList(
+                  workoutAutoGuid: widget.workoutAutoGuid,
+                  WorkoutName: widget.workoutName),
+            ),
+          ],
+        ),
       ),
     );
   }

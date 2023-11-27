@@ -23,72 +23,90 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: Theme.of(context).colorScheme.secondary,
-        appBar: AppBar(
-          title: const Text('Settings'),
-          actions: <Widget>[
-            DropdownButton(
-                underline: Container(),
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Theme.of(context).colorScheme.secondary,
+        body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 45,
+            left: 25,
+            right: 25,
+            // bottom: 25,
+          ),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 120 / 2.5,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundImage: AssetImage(
+                  "assets/images/app_loading_icon.png",
                 ),
-                items: [
-                  DropdownMenuItem(
-                    value: 'logout',
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.exit_to_app,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text('Logout'),
-                      ],
+              ),
+              SizedBox(width: 15),
+              Text(
+                'Settings',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.all(24),
+                children: [
+                  SettingsGroup(
+                    title: 'General',
+                    subtitle: '  ',
+                    titleTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
                     ),
+                    children: <Widget>[
+                      buildAccount(context),
+                      buildContactUs(
+                        context,
+                        _formKey,
+                        _controller,
+                      ),
+                    ],
+                  ),
+                  SettingsGroup(
+                    title: 'Feedback',
+                    subtitle: '  ',
+                    titleTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    children: <Widget>[
+                      buildFeedback(
+                        context,
+                        _formKey,
+                        _controller,
+                      ),
+                      buildReportABug(
+                        context,
+                        _formKey,
+                        _controller,
+                      ),
+                    ],
                   ),
                 ],
-                onChanged: (itemidentifier) {
-                  if (itemidentifier == 'logout') {
-                    FirebaseAuth.instance.signOut();
-                  }
-                })
-          ],
-        ),
-        body: SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: ListView(
-              padding: EdgeInsets.all(24),
-              children: [
-                SettingsGroup(
-                  title: 'General',
-                  titleTextStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  children: <Widget>[
-                    buildAccount(context),
-                    buildContactUs(context),
-                  ],
-                ),
-                SettingsGroup(
-                  title: 'Feedback',
-                  titleTextStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  children: <Widget>[
-                    buildFeedback(context),
-                    buildReportABug(context, _formKey, _controller),
-                  ],
-                ),
-              ],
+              ),
             ),
           ),
-        ));
+        ),
+      ],
+    ));
   }
 }
 
@@ -160,7 +178,12 @@ Widget buildAccount(BuildContext ctx) => SimpleSettingsTile(
       onTap: () {},
     );
 
-Widget buildFeedback(BuildContext ctx) => SimpleSettingsTile(
+Widget buildFeedback(
+  BuildContext ctx,
+  GlobalKey _formKey,
+  TextEditingController _controller,
+) =>
+    SimpleSettingsTile(
       leading: Icon(
         Icons.feedback,
         color: Theme.of(ctx).colorScheme.primary,
@@ -168,16 +191,119 @@ Widget buildFeedback(BuildContext ctx) => SimpleSettingsTile(
       title: 'Feedback',
       subtitle: 'Tell us what we can do better',
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Feedback Settings',
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 45,
+                  left: 25,
+                  right: 25,
+                  bottom: 25,
+                ),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 120 / 2.5,
+                      backgroundColor: Theme.of(ctx).colorScheme.secondary,
+                      backgroundImage: AssetImage(
+                        "assets/images/app_loading_icon.png",
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Text(
+                      'Feedback',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 200,
+                width: 300,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _controller,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                        hintText: 'Write to us here', filled: true),
+                    maxLines: 10,
+                    maxLength: 4096,
+                    textInputAction: TextInputAction.done,
+                    validator: (String? text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Please enter Feedback';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      String message;
+
+                      try {
+                        final user = FirebaseAuth.instance.currentUser!;
+                        final collection =
+                            FirebaseFirestore.instance.collection('Feedback');
+
+                        await collection.doc().set(
+                          {
+                            'timestamp': FieldValue.serverTimestamp(),
+                            'Feedback': _controller.text,
+                            'userId': user.uid
+                          },
+                        );
+                        message = 'Feedbac submitted successfully';
+                      } catch (_) {
+                        message = 'Error when submiting feedback';
+                      }
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        SnackBar(
+                          content: Text(message),
+                        ),
+                      );
+                      // Navigator.pop(ctx);
+                    },
+                    child: const Text(
+                      'Submit',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                    width: 50,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: const Text(
+                      'Cancel',
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-      onTap: () {},
     );
 
-Widget buildContactUs(BuildContext ctx) => SimpleSettingsTile(
+Widget buildContactUs(
+  BuildContext ctx,
+  GlobalKey _formKey,
+  TextEditingController _controller,
+) =>
+    SimpleSettingsTile(
       leading: Icon(
         Icons.contact_mail,
         color: Theme.of(ctx).colorScheme.primary,
@@ -185,18 +311,118 @@ Widget buildContactUs(BuildContext ctx) => SimpleSettingsTile(
       title: 'Contact US',
       subtitle: 'Get in touch with us',
       child: Scaffold(
-        backgroundColor: Theme.of(ctx).colorScheme.secondary,
-        appBar: AppBar(
-          title: Text(
-            'Contact Information',
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 45,
+                  left: 25,
+                  right: 25,
+                  bottom: 25,
+                ),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 120 / 2.5,
+                      backgroundColor: Theme.of(ctx).colorScheme.secondary,
+                      backgroundImage: AssetImage(
+                        "assets/images/app_loading_icon.png",
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Text(
+                      'Contact Us',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 200,
+                width: 300,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _controller,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                        hintText: 'Write to us here', filled: true),
+                    maxLines: 10,
+                    maxLength: 4096,
+                    textInputAction: TextInputAction.done,
+                    validator: (String? text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Please enter your enquiry';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      String message;
+
+                      try {
+                        final user = FirebaseAuth.instance.currentUser!;
+                        final collection =
+                            FirebaseFirestore.instance.collection('Customers');
+
+                        await collection.doc().set(
+                          {
+                            'timestamp': FieldValue.serverTimestamp(),
+                            'Customer Enquiry': _controller.text,
+                            'userId': user.uid
+                          },
+                        );
+                        message = 'Submitted successfully';
+                      } catch (_) {
+                        message = 'Error when submiting ';
+                      }
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        SnackBar(
+                          content: Text(message),
+                        ),
+                      );
+                      // Navigator.pop(ctx);
+                    },
+                    child: const Text(
+                      'Submit',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                    width: 50,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: const Text(
+                      'Cancel',
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-      onTap: () {},
     );
 
-Widget buildReportABug(BuildContext ctx, GlobalKey _formKey,
-        TextEditingController _controller) =>
+Widget buildReportABug(
+  BuildContext ctx,
+  GlobalKey _formKey,
+  TextEditingController _controller,
+) =>
     SimpleSettingsTile(
         leading: Icon(
           Icons.bug_report,
@@ -205,23 +431,38 @@ Widget buildReportABug(BuildContext ctx, GlobalKey _formKey,
         title: 'Reprot A Bug',
         subtitle: 'Report an issue',
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Bug Reporting',
-            ),
-          ),
           body: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Image.asset(
-                  "assets/images/background_image.png",
-                  width: double.infinity,
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(
-                  height: 15,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 45,
+                    left: 25,
+                    right: 25,
+                    bottom: 25,
+                  ),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 120 / 2.5,
+                        backgroundColor: Theme.of(ctx).colorScheme.secondary,
+                        backgroundImage: AssetImage(
+                          "assets/images/app_loading_icon.png",
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Text(
+                        'Report A Bug',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Container(
                   height: 200,
@@ -248,16 +489,6 @@ Widget buildReportABug(BuildContext ctx, GlobalKey _formKey,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text(
-                        'Cancel',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                      width: 50,
-                    ),
                     ElevatedButton(
                       onPressed: () async {
                         String message;
@@ -287,6 +518,16 @@ Widget buildReportABug(BuildContext ctx, GlobalKey _formKey,
                       },
                       child: const Text(
                         'Submit',
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                      width: 50,
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      child: const Text(
+                        'Cancel',
                       ),
                     ),
                   ],

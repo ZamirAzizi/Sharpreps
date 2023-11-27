@@ -115,79 +115,85 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final top = coverHeight / 2;
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text("Workouts"),
-        //   actions: <Widget>[
-        //     DropdownButton(
-        //       underline: Container(),
-        //       icon: Icon(
-        //         Icons.more_vert,
-        //         color: Theme.of(context).colorScheme.secondary,
-        //       ),
-        //       items: [
-        //         DropdownMenuItem(
-        //           value: 'logout',
-        //           child: Row(
-        //             children: <Widget>[
-        //               Icon(
-        //                 Icons.exit_to_app,
-        //                 color: Theme.of(context).colorScheme.onSecondary,
-        //               ),
-        //               SizedBox(
-        //                 width: 8,
-        //               ),
-        //               Text('Logout'),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //       onChanged: (itemidentifier) {
-        //         if (itemidentifier == 'logout') {
-        //           FirebaseAuth.instance.signOut();
-        //         }
-        //       },
-        //     )
-        //   ],
-        // ),
-
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-          onPressed: () async {
-            DialogService.load(context);
-          },
+      // appBar: AppBar(
+      //   title: const Text("Workouts"),
+      //   actions: <Widget>[
+      //     DropdownButton(
+      //       underline: Container(),
+      //       icon: Icon(
+      //         Icons.more_vert,
+      //         color: Theme.of(context).colorScheme.secondary,
+      //       ),
+      //       items: [
+      //         DropdownMenuItem(
+      //           value: 'logout',
+      //           child: Row(
+      //             children: <Widget>[
+      //               Icon(
+      //                 Icons.exit_to_app,
+      //                 color: Theme.of(context).colorScheme.onSecondary,
+      //               ),
+      //               SizedBox(
+      //                 width: 8,
+      //               ),
+      //               Text('Logout'),
+      //             ],
+      //           ),
+      //         ),
+      //       ],
+      //       onChanged: (itemidentifier) {
+      //         if (itemidentifier == 'logout') {
+      //           FirebaseAuth.instance.signOut();
+      //         }
+      //       },
+      //     )
+      //   ],
+      // ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: profileHeight / 2.5,
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    backgroundImage: AssetImage(
-                      "assets/images/app_loading_icon.png",
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Text(
-                    'Workouts',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+        onPressed: () async {
+          DialogService.load(context);
+        },
+      ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 45,
+              left: 25,
+              right: 25,
+              bottom: 25,
             ),
-            Expanded(
-              child: WorkoutsList(),
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: profileHeight / 2.5,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  backgroundImage: AssetImage(
+                    "assets/images/app_loading_icon.png",
+                  ),
+                ),
+                SizedBox(width: 15),
+                Text(
+                  'Workouts',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+          Expanded(
+            child: WorkoutsList(),
+          ),
+        ],
+      ),
+    );
   }
 }
 

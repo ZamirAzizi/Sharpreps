@@ -103,9 +103,12 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              "assets/images/app_loading_icon.png",
-              scale: 4,
+            Padding(
+              padding: const EdgeInsets.all(40),
+              child: Image.asset(
+                "assets/images/app_loading_icon.png",
+                scale: 6,
+              ),
             ),
             SizedBox(
               width: 5,
