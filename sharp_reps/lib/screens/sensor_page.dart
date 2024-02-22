@@ -3,6 +3,7 @@ import 'dart:convert' show utf8;
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class SensorPage extends StatefulWidget {
   const SensorPage({Key? key, required this.device}) : super(key: key);
@@ -174,9 +175,6 @@ class _SensorPageState extends State<SensorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Optical Distance Sensor'),
-      // ),
       body: Container(
         child: !isReady!
             ? Center(
@@ -199,7 +197,6 @@ class _SensorPageState extends State<SensorPage> {
                         bottom: 25,
                       ),
                       child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           IconButton(
@@ -272,7 +269,6 @@ class _SensorPageState extends State<SensorPage> {
                                 var time =
                                     ((int.parse(val_byte) * 100) ~/ 1000);
                                 _repTime = intToTimeLeft(time);
-                                // _repTime = (_setTime / 1000);
                               } else if (id == "14") {
                                 var time =
                                     ((int.parse(val_byte) * 100) ~/ 1000);
@@ -296,18 +292,71 @@ class _SensorPageState extends State<SensorPage> {
                                 _repIncompletePercentage = val_byte;
                               }
                               int intVal = int.parse(_numberOfReps);
-                              // var currentValue = utf8.decode(snapshot.data!);
-                              // print(_calibrationRequired);
-                              // print(currentValue);
-                              // print(_currentDisplacement);
-                              // print(id);
-                              // print(val_byte);
+                              double maxL = double.parse(_maxLimit);
+                              double minL = double.parse(_minLimit);
+                              double currVal =
+                                  double.parse(_currentDisplacement);
+
                               return Center(
                                 child: SingleChildScrollView(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      // FirebaseDropdownWidget(),
+                                      SfLinearGauge(
+                                        maximum: 500,
+                                        majorTickStyle: LinearTickStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        minorTickStyle: LinearTickStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        axisLabelStyle: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        axisTrackStyle: LinearAxisTrackStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        markerPointers: [
+                                          LinearWidgetPointer(
+                                            value: maxL,
+                                            dragBehavior:
+                                                LinearMarkerDragBehavior.free,
+                                            position:
+                                                LinearElementPosition.outside,
+                                            child: Icon(Icons.location_pin,
+                                                color: Colors.blue, size: 30),
+                                          ),
+                                          LinearWidgetPointer(
+                                            value: minL,
+                                            position:
+                                                LinearElementPosition.outside,
+                                            dragBehavior:
+                                                LinearMarkerDragBehavior.free,
+                                            child: Icon(Icons.location_pin,
+                                                color: Colors.red, size: 30),
+                                          ),
+                                          LinearWidgetPointer(
+                                            value: currVal,
+                                            position:
+                                                LinearElementPosition.outside,
+                                            dragBehavior:
+                                                LinearMarkerDragBehavior.free,
+                                            child: Icon(Icons.arrow_drop_down,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                size: 30),
+                                          ),
+                                        ],
+                                      ),
                                       Text(
                                         ' ${Data} mm',
                                         style: TextStyle(
@@ -416,50 +465,20 @@ class _SensorPageState extends State<SensorPage> {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                          )
+                                          ),
                                         ],
                                       ),
                                       Stack(
                                         alignment: Alignment.center,
                                         children: [
-                                          // Container(
-                                          //   width: 100,
-                                          //   height: 100,
-                                          //   alignment: Alignment.center,
-                                          //   decoration: BoxDecoration(
-                                          //       color: Theme.of(context)
-                                          //           .colorScheme
-                                          //           .primary,
-                                          //       borderRadius:
-                                          //           BorderRadius.circular(50)),
-                                          //   child: Text(
-                                          //     '$_currentDisplacement',
-                                          //     style: const TextStyle(
-                                          //         fontSize: 40,
-                                          //         fontWeight: FontWeight.w900),
-                                          //   ),
-                                          // ),
                                           StepProgressIndicator(
                                             totalSteps: 10,
                                             currentStep: intVal,
                                             direction: Axis.horizontal,
-                                            selectedColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            selectedColor: Colors.green,
                                             unselectedColor: Colors.red,
                                             size: 50,
                                           ),
-                                          // CircularStepProgressIndicator(
-                                          //   totalSteps: 200,
-                                          //   stepSize: 20,
-                                          //   selectedStepSize: 30,
-                                          //   currentStep: intVal,
-                                          //   width: 200,
-                                          //   height: 200,
-                                          //   padding: 0.02,
-                                          //   selectedColor: Colors.green,
-                                          //   unselectedColor: Colors.red,
-                                          // ),
                                         ],
                                       ),
                                       Row(

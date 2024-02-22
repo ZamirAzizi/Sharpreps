@@ -53,6 +53,7 @@ dependencies:
   go_router: ^10.1.0
   flutter_settings_screens: ^0.3.3-null-safety+2
   step_progress_indicator: ^1.0.2
+  syncfusion_flutter_gauges: ^24.2.4
 
  
 
