@@ -11,6 +11,7 @@ import '../data/workout_data.dart';
 // text controllers
 final exerciseNameController = TextEditingController();
 final weightController = TextEditingController();
+final set1Controller = TextEditingController();
 final repsController = TextEditingController();
 final setsController = TextEditingController();
 // new exercise DB vars
@@ -42,68 +43,81 @@ class _WorkoutPageState extends State<WorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkoutData>(
-      builder: (context, value, child) => Scaffold(
-        // appBar: AppBar(
-        //   title: Text(widget.workoutName + ' Exercises'),
-        // ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            _workoutAutoGuid = widget.workoutAutoGuid;
-            DialogService.load(context);
-          },
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onPrimary,
+      builder: (context, value, child) => Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "assets/images/background_closeup.png"), // <-- BACKGROUND IMAGE
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 45,
-                left: 25,
-                right: 25,
-                bottom: 25,
+          Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                _workoutAutoGuid = widget.workoutAutoGuid;
+                DialogService.load(context);
+              },
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  CircleAvatar(
-                    radius: profileHeight / 2.5,
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    backgroundImage: AssetImage(
-                      "assets/images/app_loading_icon.png",
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: Text(
-                      widget.workoutName + ' Exercises',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                  ),
-                ],
-              ),
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ),
-            Expanded(
-              child: ExercisesList(
-                  workoutAutoGuid: widget.workoutAutoGuid,
-                  WorkoutName: widget.workoutName),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 45,
+                    left: 25,
+                    right: 25,
+                    bottom: 25,
+                  ),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      CircleAvatar(
+                        radius: profileHeight / 2.5,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        backgroundImage: AssetImage(
+                          "assets/images/app_loading_icon.png",
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Text(
+                          widget.workoutName + ' Exercises',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ExercisesList(
+                      workoutAutoGuid: widget.workoutAutoGuid,
+                      WorkoutName: widget.workoutName),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -210,29 +224,7 @@ class LoadDialog extends IDialog {
                   },
                 ),
               ),
-              // reps
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 2,
-                            color: Theme.of(context).colorScheme.primary)),
-                    label: Text('Enter Number Of Reps:'),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter number of reps!';
-                    }
-                    return null;
-                  },
-                  controller: repsController,
-                  onChanged: (value) {
-                    _enteredReps = value;
-                  },
-                ),
-              ),
+
               // sets
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -253,6 +245,30 @@ class LoadDialog extends IDialog {
                   controller: setsController,
                   onChanged: (value) {
                     _enteredSets = value;
+                  },
+                ),
+              ),
+
+              // reps
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(context).colorScheme.primary)),
+                    label: Text('Enter Number Of Reps:'),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter number of reps!';
+                    }
+                    return null;
+                  },
+                  controller: repsController,
+                  onChanged: (value) {
+                    _enteredReps = value;
                   },
                 ),
               ),
@@ -356,226 +372,3 @@ Future<void> _saveNewExercise(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }
-
-
-
-
-//   // checkbox was tapped
-//   // void onCheckboxChanged(String workoutName, String exerciseName) {
-//   //   Provider.of<WorkoutData>(context, listen: false)
-//   //       .checkOffExercise(workoutName, exerciseName);
-//   // }
-
-//   // text controllers
-//   final exerciseNameController = TextEditingController();
-//   final weightController = TextEditingController();
-//   final repsController = TextEditingController();
-//   final setsController = TextEditingController();
-//   // new exercise DB vars
-//   var _enteredExerciseName = '';
-//   var _enteredWeight = '';
-//   var _enteredReps = '';
-//   var _enteredSets = '';
-
-//   // Saving new exercies into the workout it was invoked by
-//   Future<void> _saveNewExercise() async {
-//     FocusScope.of(context).unfocus();
-//     final user = FirebaseAuth.instance.currentUser!;
-//     final userData = await FirebaseFirestore.instance
-//         .collection('users')
-//         .doc(user.uid)
-//         .get();
-
-//     FirebaseFirestore.instance
-//         .collection('workouts')
-//         .doc(user.uid)
-//         .collection('workout names')
-//         .doc(widget.workoutAutoGuid)
-//         .collection('exercises')
-//         .doc()
-//         .set(
-//       {
-//         'exercise name': _enteredExerciseName,
-//         'weight used': _enteredWeight,
-//         'number of reps': _enteredReps,
-//         'number of sets': _enteredSets,
-//         'createdAt': Timestamp.now(),
-//         'userId': user.uid,
-//         'username': userData['username'],
-//       },
-//       // FirebaseFirestore.instance // Working
-//       //     .collection('workouts')
-//       //     .doc(user.uid)
-//       //     .collection('workout names')
-//       //     .doc(widget.workoutAutoGuid)
-//       //     .collection('exercises')
-//       //     .doc(_enteredExerciseName)
-//       //     // .collection(_enteredExerciseName)
-//       //     .set(
-//       //   {
-//       //     'exercise name': _enteredExerciseName,
-//       //     'weight used': _enteredWeight,
-//       //     'number of reps': _enteredReps,
-//       //     'number of sets': _enteredSets,
-//       //     'createdAt': Timestamp.now(),
-//       //     'userId': user.uid,
-//       //     'username': userData['username'],
-//       //   },
-//     );
-//     clear();
-//   }
-
-//   // create a new exercise
-//   void createNewExercise() {
-//     showDialog(
-//       context: context,
-//       builder: (context) => AlertDialog(
-//         title: Text('Add a new exercise'),
-//         content: SingleChildScrollView(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               // exercise name
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: TextField(
-//                   decoration: InputDecoration(
-//                     enabledBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 2,
-//                             color: Theme.of(context).colorScheme.primary)),
-//                     label: Text('Exercise Name:'),
-//                   ),
-//                   controller: exerciseNameController,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _enteredExerciseName = value;
-//                     });
-//                   },
-//                 ),
-//               ),
-
-//               // weight
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: TextField(
-//                   decoration: InputDecoration(
-//                     enabledBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 2,
-//                             color: Theme.of(context).colorScheme.primary)),
-//                     label: Text('Enter Weight Used:'),
-//                   ),
-//                   controller: weightController,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _enteredWeight = value;
-//                     });
-//                   },
-//                 ),
-//               ),
-//               // reps
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: TextField(
-//                   decoration: InputDecoration(
-//                     enabledBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 2,
-//                             color: Theme.of(context).colorScheme.primary)),
-//                     label: Text('Enter Number Of Reps:'),
-//                   ),
-//                   controller: repsController,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _enteredReps = value;
-//                     });
-//                   },
-//                 ),
-//               ),
-//               // sets
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: TextField(
-//                   decoration: InputDecoration(
-//                     enabledBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 2,
-//                             color: Theme.of(context).colorScheme.primary)),
-//                     label: Text('Enter Number Of Sets:'),
-//                   ),
-//                   controller: setsController,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _enteredSets = value;
-//                     });
-//                   },
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//         actions: [
-//           MaterialButton(
-//             onPressed: save,
-//             child: Text('Save'),
-//             color: Theme.of(context).colorScheme.primary,
-//           ),
-//           // save button
-//           MaterialButton(
-//             onPressed: cancel,
-//             child: Text('Cancel'),
-//             color: Theme.of(context).colorScheme.primary,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   //save workout
-//   void save() {
-//     // saved new exercise to firebase DB
-//     _saveNewExercise();
-
-//     // // pop dialog box
-//     Navigator.pop(context);
-//     // Clear controllers
-//     clear();
-//   }
-
-//   void cancel() {
-//     Navigator.pop(context);
-//     clear();
-//   }
-
-//   void clear() {
-//     exerciseNameController.clear();
-//     weightController.clear();
-//     repsController.clear();
-//     setsController.clear();
-//   }
-
-//   // final user = FirebaseAuth.instance.currentUser!; // Get Current User
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<WorkoutData>(
-//       builder: (context, value, child) => Scaffold(
-//         appBar: AppBar(
-//           title: Text(widget.workoutName + ' Exercises'),
-//         ),
-//         floatingActionButton: FloatingActionButton(
-//           onPressed: createNewExercise,
-//           child: Icon(
-//             Icons.add,
-//             color: Theme.of(context).colorScheme.onPrimary,
-//           ),
-//           backgroundColor: Theme.of(context).colorScheme.primary,
-//         ),
-//         body: Container(
-//             child: ExercisesList(workoutAutoGuid: widget.workoutAutoGuid),
-//             color: Colors.black12),
-//       ),
-//     );
-//   }
-// }

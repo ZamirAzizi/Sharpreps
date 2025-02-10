@@ -7,6 +7,18 @@ import 'package:sharp_reps/widgets/ScanResultTile.dart';
 import '../sensor_page.dart';
 
 class FlutterBlueApp extends StatelessWidget {
+  final String workoutAutoGuid;
+  final String exerciseName;
+  final String exerciseAutoGuid;
+  final String workoutName;
+
+  const FlutterBlueApp({
+    super.key,
+    required this.workoutAutoGuid,
+    required this.exerciseName,
+    required this.exerciseAutoGuid,
+    required this.workoutName,
+  });
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
@@ -15,7 +27,12 @@ class FlutterBlueApp extends StatelessWidget {
         builder: (c, snapshot) {
           final state = snapshot.data;
           if (state == BluetoothState.on) {
-            return FindDevicesScreen();
+            return FindDevicesScreen(
+              workoutName: workoutName,
+              workoutAutoGuid: workoutAutoGuid,
+              exerciseAutoGuid: exerciseAutoGuid,
+              exerciseName: exerciseName,
+            );
           }
           return BluetoothOffScreen(state: state!);
         });
@@ -51,6 +68,18 @@ class BluetoothOffScreen extends StatelessWidget {
 }
 
 class FindDevicesScreen extends StatelessWidget {
+  final String workoutAutoGuid;
+  final String exerciseName;
+  final String exerciseAutoGuid;
+  final String workoutName;
+
+  const FindDevicesScreen({
+    super.key,
+    required this.workoutAutoGuid,
+    required this.exerciseName,
+    required this.exerciseAutoGuid,
+    required this.workoutName,
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +140,13 @@ class FindDevicesScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) {
                                 // r.device.connect();
-                                return SensorPage(device: r.device);
+                                return SensorPage(
+                                  device: r.device,
+                                  wkAutoGuid: workoutAutoGuid,
+                                  exAutoGuid: exerciseAutoGuid,
+                                  exerciseNm: exerciseName,
+                                  wkName: workoutName,
+                                );
                               },
                             ),
                           ),

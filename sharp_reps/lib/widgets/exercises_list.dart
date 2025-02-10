@@ -67,11 +67,28 @@ class _ExercisesListState extends State<ExercisesList> {
                 return ListTile(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ExerciseDetail(),
+                      builder: (context) => ExerciseDetail(
+                        workoutName: widget.WorkoutName,
+                        exerciseName: exerciseName,
+                        exerciseAutoGuid: exerciseAutoGuid,
+                        workoutAutoGuid: widget.workoutAutoGuid,
+                        weight: exercisesSnapshot.data!.docs[index]
+                            ['weight used'],
+                        reps: exercisesSnapshot.data!.docs[index]
+                            ['number of reps'],
+                        sets: exercisesSnapshot.data!.docs[index]
+                            ['number of sets'],
+                        isCompleted: exercisesSnapshot.data!.docs[index]
+                            ['checkbox'],
+                        onCheckboxChanged: (val) {
+                          val = val!;
+                        },
+                      ),
                     ),
                   ),
                   title: SingleChildScrollView(
                     child: ExerciseTile(
+                      workoutName: widget.WorkoutName,
                       exerciseName: exerciseName,
                       exerciseAutoGuid: exerciseAutoGuid,
                       workoutAutoGuid: widget.workoutAutoGuid,

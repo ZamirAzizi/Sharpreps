@@ -124,6 +124,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold),
                           ),
+                          SizedBox(
+                            width: 70,
+                          ),
+                          IconButton(
+                            onPressed: () => FirebaseAuth.instance.signOut(),
+                            icon: Icon(
+                              Icons.exit_to_app,
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),

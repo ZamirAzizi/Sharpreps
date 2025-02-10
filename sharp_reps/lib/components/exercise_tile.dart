@@ -12,6 +12,7 @@ class ExerciseTile extends StatefulWidget {
   void Function(bool?)? onCheckboxChanged;
   final String workoutAutoGuid;
   final String exerciseAutoGuid;
+  final String workoutName;
 
   ExerciseTile({
     super.key,
@@ -23,6 +24,7 @@ class ExerciseTile extends StatefulWidget {
     required this.onCheckboxChanged,
     required this.workoutAutoGuid,
     required this.exerciseAutoGuid,
+    required this.workoutName,
   });
 
   @override
@@ -93,7 +95,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FlutterBlueApp(),
+                        builder: (context) => FlutterBlueApp(
+                          exerciseAutoGuid: widget.exerciseAutoGuid,
+                          exerciseName: widget.exerciseName,
+                          workoutAutoGuid: widget.workoutAutoGuid,
+                          workoutName: widget.workoutName,
+                        ),
                       ));
                 }
                 setState(() {
